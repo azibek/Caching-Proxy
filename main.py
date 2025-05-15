@@ -1,22 +1,55 @@
-from requests import request
-from typing import Literal
+from fastapi import FastAPI, Request, Response
+import httpx
 
+app = FastAPI()
+upstream_url = "https://api.agify.io/"  # example upstream base URL
 
-request_params = {
-    "method": "GET",
-    "url": "https://catfact.ninja/fact",
-    "params": {
-        "status": "active",
-        "limit": 10,
-        "page": 1
-    },
-    "json": None
-}
+@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
+async def proxy(full_path: str, request: Request):
+    # Construct the full URL to upstream
+    url = upstream_url + full_path
 
-VALID_METHODS = Literal["GET", "POST", "PUT", "OPTION"]
+    # Extract method, headers, query params, and body from incoming request
+    method = request.method
+    headers = dict(request.headers)
+    params = dict(request.query_params)
+    body = await request.body()
 
-def fetch(method: VALID_METHODS, url: str, params: dict, json,):
-    response = request(method, url, params=params, json=json)
-    return response.json()
+    # Remove 'host' header to avoid conflicts
+    headers.pop("host", None)
 
-print(fetch(request_params["method"], request_params["url"],request_params["params"], request_params["json"]))
+    async with httpx.AsyncClient(default_encoding=False) as client:
+        resp = await client.request(
+            method=method,
+            url=url,
+            headers=headers,
+            params=params,
+            content=body,
+            timeout=10.0
+        )
+
+    # Build a response with the same status code, headers, and content
+    # Filter out hop-by-hop headers that should not be forwarded
+    excluded_headers = {
+        "content-encoding",
+        "transfer-encoding",
+        "connection",
+        "keep-alive",
+        "proxy-authenticate",
+        "proxy-authorization",
+        "te",
+        "trailer",
+        "upgrade",
+        "content-length"
+    }
+    response_headers = {
+        key: value for key, value in resp.headers.items()
+        if key.lower() not in excluded_headers
+    }
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        headers=response_headers,
+        media_type=resp.headers.get("content-type"),
+    )
