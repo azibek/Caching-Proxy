@@ -16,7 +16,7 @@ class TestJsonDumpMultipleWrites(unittest.TestCase):
     #     return super().tearDown()
     
     def test_writing_cache_to_json(self):
-        cache_dir = os.getenv("CACHE_DIR", "C:\\Users\\Aqeel\\Documents\\projects\\Caching-Proxy") 
+        cache_dir = os.getenv("CACHE_DIR") 
         
         cache_api = CacheAPI(cache_dir)
         file_name = "tmp.json"
