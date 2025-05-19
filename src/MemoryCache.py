@@ -1,4 +1,4 @@
-from CacheStrategy import CacheStrategy
+from src.CacheStrategy import CacheStrategy
 
 class MemoryCache(CacheStrategy):
     def __init__(self):
