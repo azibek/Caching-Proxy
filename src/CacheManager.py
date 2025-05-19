@@ -1,5 +1,5 @@
-from MemoryCache import MemoryCache
-from CacheStrategy import CacheStrategy
+from src.MemoryCache import MemoryCache
+from src.CacheStrategy import CacheStrategy
 class CacheManager:
 
     def __init__(self, cache_strategies : dict[str, CacheStrategy]):
