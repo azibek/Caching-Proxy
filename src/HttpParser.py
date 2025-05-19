@@ -20,7 +20,7 @@ class HttpParser:
 
 
     @staticmethod
-    async def parse_request(request: Request) -> RequestInfo:
+    async def parse_request(request: Request, base_url: str) -> RequestInfo:
         clean_headers = filter_headers(dict(request.headers), HttpParser.EXCLUDED_REQUEST_HEADERS)
         params = dict(request.query_params)
 

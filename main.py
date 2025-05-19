@@ -10,5 +10,5 @@ fastapi request layer and httpx response layers modify the original request to s
 '''
 @app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
 async def proxy(full_path: str, request: Request):
-    proxy_server = ProxyServer({"memory": MemoryCache()})
+    proxy_server = ProxyServer({"memory": MemoryCache()}, upstream_base_url=upstream_url)
     return await proxy_server.handle_request(request)
