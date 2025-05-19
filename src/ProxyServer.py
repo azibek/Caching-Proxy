@@ -26,9 +26,13 @@ class ProxyServer:
 
         if cached_response_json:
             headers = {"X-CACHE": self.CACHE_HIT}
+            print("Type of cached_response_json:", type(cached_response_json))
+
+            print(headers)
             return JSONResponse(
                 headers = headers,
-                content=cached_response_json
+                content=cached_response_json,
+                media_type="application/json"
             )
         
         resp = await self.fetch_from_origin(req_info)

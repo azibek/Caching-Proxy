@@ -24,7 +24,7 @@ class ResponseInfo:
     url : str
     headers : dict
     status_code : str # TODO: add proper literals for status codes
-    content: dict | bytes 
+    content: dict
     media_type : str
     timestamp : datetime
     
@@ -33,6 +33,6 @@ class ResponseInfo:
             "url": self.url,
             "headers": self.headers,
             "status_code": self.status_code,
-            "content": self.content,
+            "content": self.content.decode(),
             "media_type" : self.media_type
         }
