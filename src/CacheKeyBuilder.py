@@ -18,9 +18,9 @@ class CacheKeyBuilder:
         if 'Content-Type' in headers:
             key_parts.append(headers['Content-Type'])
 
-        if request_info.body:
-            body_hash = hashlib.sha256(request_info.body.encode()).hexdigest()
-            key_parts.append(body_hash)
+        # if request_info.body:
+        #     body_hash = hashlib.sha256(request_info.body.encode()).hexdigest()
+        #     key_parts.append(body_hash)
 
         key_string = "|".join(key_parts)
         cache_key = hashlib.sha256(key_string.encode()).hexdigest()

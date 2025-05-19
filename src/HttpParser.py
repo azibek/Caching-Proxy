@@ -24,12 +24,12 @@ class HttpParser:
         clean_headers = filter_headers(dict(request.headers), HttpParser.EXCLUDED_REQUEST_HEADERS)
         params = dict(request.query_params)
 
-        try:
-            body = (await request.body()).decode('utf-8')
-        except UnicodeDecodeError:
-            body = None  # Or log it and set to some placeholder
+        # try:
+        #     body = (await request.body()).decode('utf-8')
+        # except UnicodeDecodeError:
+        #     body = None  # Or log it and set to some placeholder
 
-        url = str(request.url)
+        url = base_url
         if 'full_path' in request.path_params:
             url += request.path_params['full_path']
 
@@ -37,8 +37,8 @@ class HttpParser:
             method=request.method,
             url=url,
             headers=clean_headers,
-            params=params,
-            body=body
+            params=params
+            # body=body
         )
 
     @staticmethod

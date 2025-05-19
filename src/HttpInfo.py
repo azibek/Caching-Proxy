@@ -8,10 +8,16 @@ class RequestInfo:
     url : str
     headers : dict
     params : dict
-    body : dict
+    # body : dict
 
-    def to_json(): # TODO: add conversion logic
-        ...
+    def to_json(self): # TODO: add conversion logic
+        return {
+            "method": self.method,
+            "url": self.url,
+            "headers": self.headers,
+            "params" : self.params
+            # "body": self.body
+        }
 
 @dataclass
 class ResponseInfo:
@@ -23,7 +29,7 @@ class ResponseInfo:
     timestamp : datetime
     
     def to_json(self): # TODO: add conversion logic
-        return{
+        return {
             "url": self.url,
             "headers": self.headers,
             "status_code": self.status_code,
